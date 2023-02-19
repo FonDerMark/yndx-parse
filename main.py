@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 import requests
 import datetime
 from fake_useragent import UserAgent
-import re
 
 latitude = 58.635513
 longitude = 59.79863
@@ -25,8 +24,9 @@ def get_weather(coordinates=(latitude, longitude)):
     }
     url = f'https://yandex.ru/pogoda/details/10-day-weather?lat={coordinates[0]}&lon={coordinates[1]}&via=ms'
     content = requests.get(url, headers=headers).text
-    soup = BeautifulSoup(content, 'lxml')
+    soup = BeautifulSoup(content, 'html.parser')
     weather_tables = soup.findAll('table', class_='weather-table')
+    dict_with_weather['city'] = soup.find('h1', id="main_title").text
     count = 0
     tag = 0
     for i in weather_tables:
@@ -45,8 +45,8 @@ def write_weather(filename='weather.json'):
     file_path = os.path.join(APP_PATH, filename)
     if os.path.exists(file_path):
         with open(file_path, 'rb') as f:
-            print(json.loads(f.read())['today'])
-            if json.loads(f.read())['today'] == str(datetime.date.today()):
+            result_dict = json.loads(f.read())
+            if result_dict['today'] == str(datetime.date.today()):
                 print('Today')
                 return json.loads(f.read())
             else:
@@ -67,4 +67,5 @@ def get_coordinates(city):
 
 
 if __name__ == '__main__':
-    write_weather()
+    coordinates = get_coordinates('Лесной свердловская область')
+    print(get_weather(coordinates))
