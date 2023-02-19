@@ -1,6 +1,6 @@
 import json
 import os.path
-
+from geopy.geocoders import Nominatim
 from bs4 import BeautifulSoup
 import requests
 import datetime
@@ -9,11 +9,12 @@ import re
 
 latitude = 58.635513
 longitude = 59.79863
+geolocator = Nominatim(user_agent='Yndx-parse')
 
 APP_PATH = ''
 
 
-def get_weather(lat=latitude, lon=longitude):
+def get_weather(coordinates=(latitude, longitude)):
     ua = UserAgent()
     headers = {
         'User-Agent': ua.random,
@@ -22,7 +23,7 @@ def get_weather(lat=latitude, lon=longitude):
         'today': str(datetime.date.today()),
         'weather': {},
     }
-    url = f'https://yandex.ru/pogoda/details/10-day-weather?lat={lat}&lon={lon}&via=ms'
+    url = f'https://yandex.ru/pogoda/details/10-day-weather?lat={coordinates[0]}&lon={coordinates[1]}&via=ms'
     content = requests.get(url, headers=headers).text
     soup = BeautifulSoup(content, 'lxml')
     weather_tables = soup.findAll('table', class_='weather-table')
@@ -43,12 +44,9 @@ def get_weather(lat=latitude, lon=longitude):
 def write_weather(filename='weather.json'):
     file_path = os.path.join(APP_PATH, filename)
     if os.path.exists(file_path):
-        print('file exists')
-        with open(file_path, 'r') as f:
-            print(f.read())
-            print(type(f.read()))
-            print(json.loads(f.read()))
-            if json.loads(f.read()).get('today') == str(datetime.date.today()):
+        with open(file_path, 'rb') as f:
+            print(json.loads(f.read())['today'])
+            if json.loads(f.read())['today'] == str(datetime.date.today()):
                 print('Today')
                 return json.loads(f.read())
             else:
@@ -59,8 +57,13 @@ def write_weather(filename='weather.json'):
                 return new_weather
     else:
         with open(file_path, 'w') as f:
-            f.write(json.dumps({'today': '', 'weather': ''}))
+            f.write(json.dumps({"today": "1", "weather": "1"}, indent=2))
             write_weather()
+
+
+def get_coordinates(city):
+    location = geolocator.geocode(city)
+    return location.latitude, location.longitude
 
 
 if __name__ == '__main__':
