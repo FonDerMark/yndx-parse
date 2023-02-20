@@ -8,7 +8,6 @@ from fake_useragent import UserAgent
 
 latitude = 58.635513
 longitude = 59.79863
-geolocator = Nominatim(user_agent='Yndx-parse')
 
 APP_PATH = ''
 
@@ -42,12 +41,14 @@ def request_weather(coords):
     return dict_with_weather
 
 
-def get_weather(coords=(latitude, longitude), filename='weather.json', save_json=True):
+def get_weather(coords=(latitude, longitude), filename='weather.json', save_json=True, location=None):
+    if not save_json:
+        return request_weather(coords)
     file_path = os.path.join(APP_PATH, filename)
     if os.path.exists(file_path):
         with open(file_path, encoding='utf-8') as f:
             new_weather = json.load(f)
-            if new_weather ['today'] == str(datetime.date.today()):
+            if new_weather['today'] == str(datetime.date.today()):
                 return new_weather
             else:
                 new_weather = request_weather(coords)
@@ -62,6 +63,7 @@ def get_weather(coords=(latitude, longitude), filename='weather.json', save_json
 
 
 def get_coordinates(city_name):
+    geolocator = Nominatim(user_agent='Yndx-parse')
     location = geolocator.geocode(city_name)
     return location.latitude, location.longitude
 
