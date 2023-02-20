@@ -77,5 +77,4 @@ class YndxParse:
 
 
 if __name__ == '__main__':
-    yp = YndxParse(location='London')
-    yp.get_weather()
+    pass
