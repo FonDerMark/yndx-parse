@@ -21,7 +21,7 @@ class YndxParse:
     def get_weather(self):
         if not self.save_json:
             return self.__request_weather(self.location)
-        file_path = os.path.join(APP_PATH, self.filename)
+        file_path = os.path.join(self.folder_to_save, self.filename)
         if os.path.exists(file_path):
             with open(file_path, encoding='utf-8') as f:
                 new_weather = json.load(f)
