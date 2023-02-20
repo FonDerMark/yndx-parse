@@ -13,16 +13,19 @@ pip install Yndx-parse
 ## Usage
 
 ```python
-import yndx-parse
+from yndx-parse import YndxParse
 
-# returns 'words'
-yndx-parse.pluralize('word')
+# Create an instance of the class,
+# passing the argument as the name of the city.
+yp = YndxParse('London')
+print(yp.get_weather())
 
-# returns 'geese'
-yndx-parse.pluralize('goose')
-
-# returns 'phenomenon'
-yndx-parse.singularize('phenomena')
+# Create an instance of the class,
+# passing the argument as a tuple
+# containing longitude and latitude.
+coords = (54.341, 43.8766)
+yp = YndxParse(coords)
+print(yp.get_weather())
 ```
 
 ## Contributing
