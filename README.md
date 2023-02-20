@@ -1,6 +1,6 @@
 # Yndx-parse
 
-Foobar is a Python library for dealing with word pluralization.
+Yndx-parse is a Python library for dealing with word pluralization.
 
 ## Installation
 
