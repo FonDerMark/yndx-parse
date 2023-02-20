@@ -1,10 +1,10 @@
 # Yndx-parse
 
-Yndx-parse is a Python library for dealing with word pluralization.
+Yndx-parse is a Python library for parsing weather data.
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install Yndx-parse.
 
 ```bash
 pip install Yndx-parse
