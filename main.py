@@ -13,7 +13,8 @@ geolocator = Nominatim(user_agent='Yndx-parse')
 APP_PATH = ''
 
 
-def get_weather(coordinates=(latitude, longitude)):
+def request_weather(coords):
+    print('Request')
     ua = UserAgent()
     headers = {
         'User-Agent': ua.random,
@@ -41,31 +42,30 @@ def get_weather(coordinates=(latitude, longitude)):
     return dict_with_weather
 
 
-def write_weather(filename='weather.json'):
+def get_weather(coords=(latitude, longitude), filename='weather.json', save_json=True):
     file_path = os.path.join(APP_PATH, filename)
     if os.path.exists(file_path):
-        with open(file_path, 'rb') as f:
-            result_dict = json.loads(f.read())
-            if result_dict['today'] == str(datetime.date.today()):
-                print('Today')
-                return json.loads(f.read())
+        with open(file_path, encoding='utf-8') as f:
+            new_weather = json.load(f)
+            if new_weather ['today'] == str(datetime.date.today()):
+                return new_weather
             else:
-                print('No today')
-                new_weather = get_weather()
+                new_weather = request_weather(coords)
                 with open(file_path, 'w') as f:
-                    f.write(json.dumps(get_weather(), indent=2, ensure_ascii=False))
+                    f.write(json.dumps(request_weather(coords), indent=2, ensure_ascii=False))
                 return new_weather
     else:
         with open(file_path, 'w') as f:
-            f.write(json.dumps({"today": "1", "weather": "1"}, indent=2))
-            write_weather()
+            result = request_weather(coords)
+            f.write(json.dumps(result, ensure_ascii=False))
+            return json.dumps(result, ensure_ascii=False)
 
 
-def get_coordinates(city):
-    location = geolocator.geocode(city)
+def get_coordinates(city_name):
+    location = geolocator.geocode(city_name)
     return location.latitude, location.longitude
 
 
 if __name__ == '__main__':
     coordinates = get_coordinates('Лесной свердловская область')
-    print(get_weather(coordinates))
+    get_weather()
