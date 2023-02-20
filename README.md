@@ -16,13 +16,13 @@ pip install Yndx-parse
 import yndx-parse
 
 # returns 'words'
-foobar.pluralize('word')
+yndx-parse.pluralize('word')
 
 # returns 'geese'
-foobar.pluralize('goose')
+yndx-parse.pluralize('goose')
 
 # returns 'phenomenon'
-foobar.singularize('phenomena')
+yndx-parse.singularize('phenomena')
 ```
 
 ## Contributing
