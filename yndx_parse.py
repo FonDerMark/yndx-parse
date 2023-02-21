@@ -56,16 +56,16 @@ class YndxParse:
             dict_with_weather['city'] = soup.find('h1', id="main_title").text
         except:
             self.__request_weather(coords)
+        today_date = datetime.date.today()
         count = 0
-        tag = 0
         for i in weather_tables:
             for j in i.findAll('div', 'weather-table__temp'):
-                if not dict_with_weather['weather'].get(tag):
-                    dict_with_weather['weather'][tag] = []
-                dict_with_weather['weather'][tag].append(j.text)
+                if not dict_with_weather['weather'].get(str(today_date)):
+                    dict_with_weather['weather'][str(today_date)] = []
+                dict_with_weather['weather'][str(today_date)].append(j.text)
                 count += 1
                 if count == 4:
-                    tag += 1
+                    today_date += datetime.timedelta(days=1)
                     count = 0
         return dict_with_weather
 
@@ -77,4 +77,5 @@ class YndxParse:
 
 
 if __name__ == '__main__':
-    pass
+    yp = YndxParse('boston', save_json=False)
+    print(yp.get_weather())
