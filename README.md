@@ -7,7 +7,7 @@ Yndx-parse is a Python library for parsing weather data.
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install Yndx-parse.
 
 ```bash
-pip install Yndx-parse
+pip install yndx-parse
 ```
 
 ## Usage
