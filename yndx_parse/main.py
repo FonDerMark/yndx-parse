@@ -8,6 +8,13 @@ from fake_useragent import UserAgent
 
 
 class YndxParse:
+    '''
+        Пользование данной библиотекой начинается с создания экземпляра данного класса.
+    'location' - принимает в виде атрибута название города или координаты местности, для запроса погоды.
+    'folder_to_save' - путь к папке в которой вы предполагаете хранить json файлы с прогнозом погоды (по умолчанию 'None')
+    'filename' - 'weather.json',
+    'save_json'=False):
+    '''
     def __init__(self,
                  location,
                  folder_to_save=None,
@@ -58,15 +65,20 @@ class YndxParse:
             self.__request_weather(coords)
         count = 0
         tag = 0
+        today = datetime.date.today()
         for i in weather_tables:
             for j in i.findAll('div', 'weather-table__temp'):
                 if not dict_with_weather['weather'].get(tag):
-                    dict_with_weather['weather'][tag] = []
-                dict_with_weather['weather'][tag].append(j.text)
+                    dict_with_weather['weather'][tag] = {
+                        'date': str(today),
+                        'forecast': []
+                    }
+                dict_with_weather['weather'][tag]['forecast'].append(j.text)
                 count += 1
                 if count == 4:
                     tag += 1
                     count = 0
+                    today += datetime.timedelta(days=1)
         return json.dumps(dict_with_weather, ensure_ascii=False)
 
     @staticmethod
@@ -77,5 +89,6 @@ class YndxParse:
 
 
 if __name__ == '__main__':
-    yp = YndxParse('boston', save_json=False)
+    city = 'Oslo'
+    yp = YndxParse(city, save_json=False)
     print(yp.get_weather())
