@@ -3,7 +3,6 @@
 .gitignore
 test.py
 weather.json
-deploy.txt
 # IntelliJ project files
 .idea
 *.iml
