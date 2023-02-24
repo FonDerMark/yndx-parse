@@ -5,7 +5,7 @@ with open('README.md', encoding='utf-8') as f:
 
 setup(
     name='yndx_parse',
-    version='0.6',
+    version='0.10',
     packages=['yndx_parse'],
     url='https://github.com/FonDerMark/yndx-parse',
     license='MIT',
